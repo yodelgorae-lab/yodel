@@ -20,8 +20,7 @@
 
     html, body {
       width: 100%;
-      min-height: 100vh;
-      min-height: 100dvh;
+      height: 100%;
       background-color: #f4f6f8;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
@@ -33,7 +32,7 @@
       padding: 20px;
     }
 
-    /* 업무용 페이지 위장 UI */
+    /* 업무용 페이지 위장 카드 UI */
     .fake-doc-card {
       background: #ffffff;
       padding: 40px 30px;
@@ -60,4 +59,89 @@
 
     .open-btn {
       width: 100%;
-      background-color: #2563eb
+      background-color: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .open-btn:hover {
+      background-color: #1d4ed8;
+    }
+
+    /* 장난 화면 (클릭 전 숨김) */
+    #prank-screen {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #000000;
+      z-index: 999999;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #prank-screen img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. 위장 업무 카드 -->
+  <div class="fake-doc-card" id="doc-card">
+    <h2>보안 문서 열람</h2>
+    <p>요청하신 기획서 및 결재 파일이 준비되었습니다.<br>아래 버튼을 눌러 확인하십시오.</p>
+    <button type="button" class="open-btn" onclick="triggerPrank()">문서 열람 (PDF)</button>
+  </div>
+
+  <!-- 2. 장난 레이어 -->
+  <div id="prank-screen">
+    <img src="https://img.etnews.com/news/article/2024/03/16/cms_temp_stats_17105737071912665080.jpg" 
+         alt="Prank Image" 
+         id="prank-img" 
+         referrerpolicy="no-referrer">
+    <audio id="prank-audio" src="./1.mp3" preload="auto"></audio>
+  </div>
+
+  <script>
+    function triggerPrank() {
+      // 1. 화면 전환
+      const docCard = document.getElementById('doc-card');
+      const prankScreen = document.getElementById('prank-screen');
+
+      if (docCard) docCard.style.display = 'none';
+      if (prankScreen) prankScreen.style.display = 'flex';
+
+      // 2. 오디오 재생
+      const audio = document.getElementById('prank-audio');
+      if (audio) {
+        audio.currentTime = 0;
+        audio.volume = 1.0;
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(function(err) {
+            console.warn("오디오 재생 실패:", err);
+          });
+        }
+      }
+
+      // 3. 전체화면
+      if (prankScreen.requestFullscreen) {
+        prankScreen.requestFullscreen().catch(function() {});
+      } else if (prankScreen.webkitRequestFullscreen) {
+        prankScreen.webkitRequestFullscreen().catch(function() {});
+      }
+    }
+  </script>
+</body>
+</html>
