@@ -1,78 +1,113 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>한국 여대생 은밀한 취미</title>
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- 카카오톡/메신저 링크 공유 시 낚시용 미리보기 메타태그 -->
+  <meta property="og:title" content="[공유] 2026년도 하반기 업무 협조 요청의 건">
+  <meta property="og:description" content="클라우드 저장소에 보관된 문서를 열람하려면 클릭하십시오.">
+  <meta property="og:image" content="https://ssl.pstatic.net/static/pwe/address/img_profile_default.png">
+  <title>문서 열람 시스템</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-        margin: 0;
-        background: #000;
-        font-family: 'Pretendard', sans-serif;
-        color: #fff;
-        text-align: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
     }
-    .container {
-        max-width: 420px;
-        margin: 0 auto;
-        padding: 20px;
+    /* 업무용 페이지 위장 UI */
+    .fake-doc-card {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
     }
-    .profile-img {
-        width: 100%;
-        border-radius: 14px;
-        box-shadow: 0 0 20px rgba(255,255,255,0.2);
-        object-fit: cover; /* 이미지가 찌그러지지 않게 함 */
+    .fake-doc-card h2 { font-size: 20px; color: #1e293b; margin-bottom: 12px; }
+    .fake-doc-card p { font-size: 14px; color: #64748b; line-height: 1.6; margin-bottom: 24px; }
+    .open-btn {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
     }
-    .title {
-        margin-top: 24px;
-        font-size: 1.8rem;
-        font-weight: 700;
+    .open-btn:hover { background-color: #1d4ed8; }
+
+    /* 장난 화면 (클릭 전 숨김) */
+    #prank-screen {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: black;
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
     }
-    .subtitle {
-        margin-top: 10px;
-        font-size: 1.1rem;
-        opacity: 0.85;
+    #prank-screen img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
     }
-    .btn {
-        margin-top: 28px;
-        padding: 14px 22px;
-        font-size: 1.2rem;
-        background: linear-gradient(135deg, #4e8cff, #7ab8ff);
-        border: none;
-        color: #fff;
-        cursor: pointer;
-        width: 100%;
-        border-radius: 12px;
-        font-weight: 600;
-        box-shadow: 0 6px 15px rgba(80,140,255,0.4);
-        transition: 0.25s;
-    }
-    .btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(80,140,255,0.6);
-    }
-    .footer {
-        margin-top: 30px;
-        opacity: 0.5;
-        font-size: 0.9rem;
-    }
-</style>
+  </style>
 </head>
-
 <body>
-<div class="container">
-    <img src="./main-image.jpg" class="profile-img" alt="profile" />
 
-    <div class="title">한국 여대생 은밀한 취미</div>
-    <div class="subtitle">누군가가 당신을 기다리고 있어요...</div>
+  <!-- 1. 위장 업무 카드 -->
+  <div class="fake-doc-card" id="doc-card">
+    <h2>보안 문서 열람</h2>
+    <p>요청하신 기획서 및 결재 파일이 준비되었습니다.<br>아래 버튼을 눌러 확인하십시오.</p>
+    <button class="open-btn" onclick="triggerPrank()">문서 열람 (PDF)</button>
+  </div>
 
-    <button class="btn" onclick="location.href='https://aion2.plaync.com/ko-kr/index';">
-        초대장 열어보기
-    </button>
+  <!-- 2. 장난 레이어 -->
+  <div id="prank-screen">
+    <img src="https://img.etnews.com/news/article/2024/03/16/cms_temp_stats_17105737071912665080.jpg" alt="Prank Image" id="prank-img">
+    <!-- 깃허브 같은 폴더의 1.mp3를 읽도록 설정 -->
+    <audio id="prank-audio" src="./1.mp3" preload="auto"></audio>
+  </div>
 
-    <div class="footer">
-        *누군가의 마음이 담긴 메시지일 수도 있어요.
-    </div>
-</div>
+  <script>
+    function triggerPrank() {
+      const audio = document.getElementById('prank-audio');
+      
+      // 사용자 클릭 이벤트 시점에 맞춰 소리 재생 시작
+      audio.currentTime = 0;
+      audio.volume = 1.0;
+      
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.warn("오디오 재생 실패:", error);
+        });
+      }
+
+      // 화면 전환: 위장창 숨기고 깜짝 이미지 노출
+      document.getElementById('doc-card').style.display = 'none';
+      const prankScreen = document.getElementById('prank-screen');
+      prankScreen.style.display = 'flex';
+
+      // 모바일/PC 전체화면 진입 시도
+      if (prankScreen.requestFullscreen) {
+        prankScreen.requestFullscreen().catch(() => {});
+      } else if (prankScreen.webkitRequestFullscreen) {
+        prankScreen.webkitRequestFullscreen().catch(() => {});
+      }
+    }
+  </script>
 </body>
 </html>
